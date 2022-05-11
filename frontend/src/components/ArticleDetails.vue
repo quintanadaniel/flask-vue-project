@@ -1,0 +1,77 @@
+<template>
+  <div class="container mt-5">
+    <h2>{{article.title}}</h2>
+    <p class="mt-3">
+      {{article.body}}
+    </p>
+    <h6>
+      Published Date: {{article.create_at}}
+    </h6>
+    <router-link
+        :to="{name:'articledit', params:{id: article.id}}"
+        class="btn btn-success mt-3"
+    >Update</router-link>
+
+    <button class="btn btn-danger mx-3 mt-3" @click="deleteArticleData">
+      Delete
+    </button>
+
+  </div>
+</template>
+
+<script>
+export default {
+  name: "ArticleDetails",
+  data() {
+    return {
+      article:{}
+    }
+  },
+  props: {
+    id: {
+      type:[Number, String],
+      required:true
+    }
+  },
+  methods: {
+    getArticleData() {
+      fetch(`http://127.0.0.1:5000/get/${this.id}/`, {
+        headers: {
+          "Content-Type":"application/json"
+        }
+      })
+      .then(resp => resp.json())
+      .then(data => {
+        console.log(data);
+        this.article = data
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    },
+    deleteArticleData() {
+      fetch(`http://127.0.0.1:5000/delete/${this.id}/`, {
+        method:'DELETE',
+        headers: {
+          "Content-Type":"application/json"
+        }
+      })
+      .then(() => {
+        this.$router.push({
+          name: 'home'
+        })
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    }
+  },
+  created() {
+    this.getArticleData()
+  },
+}
+</script>
+
+<style scoped>
+
+</style>

@@ -1,0 +1,14 @@
+# Use root/example as user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    image: mysql
+    platform: linux/x86_64
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+    ports:
+      - "33060:3306"
